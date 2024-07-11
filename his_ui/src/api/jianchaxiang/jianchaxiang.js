@@ -56,3 +56,12 @@ export function updateStatus(id,status) {
     data: data
   })
 }
+
+
+// 获取可用的检查项目
+export function getJcxmList() {
+  return request({
+    url: '/jianchaxiang/jianchaxiang/getJcxmList',
+    method: 'get'
+  })
+}

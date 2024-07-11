@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form v-model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="病历号" prop="caseNumber">
         <el-input
           v-model="queryParams.caseNumber"
@@ -39,7 +39,7 @@
         />
       </el-form-item>
       <el-form-item label="挂号科室" prop="deptmentId">
-        <el-select @change="getDoctorList()" v-model="form.deptmentId" placeholder="请选择科室">
+        <el-select @change="getDoctorList" v-model="queryParams.deptmentId" placeholder="请选择科室">
           <el-option
             v-for="item in keshiList"
             :key="item.id"
@@ -58,8 +58,8 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="挂号级别" prop="registLevelId">
-        <el-select v-model="queryParams.registLevelId" placeholder="请选择挂号级别" clearable size="small">
+      <el-form-item label="挂号级别" prop="registLevel">
+        <el-select v-model="queryParams.registLevel" placeholder="请选择挂号级别" clearable size="small">
           <el-option
             v-for="dict in dict.type.regist_level"
             :key="dict.value"
@@ -68,8 +68,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="结算类别" prop="settleCategoryId">
-        <el-select v-model="queryParams.settleCategoryId" placeholder="请选择结算类别" clearable size="small">
+      <el-form-item label="结算类别" prop="settleCategory">
+        <el-select v-model="queryParams.settleCategory" placeholder="请选择结算类别" clearable size="small">
           <el-option
             v-for="dict in dict.type.settle_category"
             :key="dict.value"
@@ -308,7 +308,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="挂号科室" prop="deptmentId">
-          <el-select @change="getDoctorList()" v-model="form.deptmentId" placeholder="请选择科室">
+          <el-select  @change="getDoctorList" v-model="form.deptmentId" placeholder="请选择科室">
             <el-option
               v-for="item in keshiList"
               :key="item.id"
@@ -411,26 +411,26 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        caseNumber: null,
-        realName: null,
-        gender: null,
-        cardNumber: null,
-        birthday: null,
-        age: null,
-        ageType: null,
-        homeAddress: null,
-        registMoney: null,
-        visitDate: null,
-        noon: null,
-        deptmentId: null,
-        employeeId: null,
-        registLevel: null,
-        settleCategory: null,
-        isBook: null,
-        registMethod: null,
-        visitState: null,
-        deptmentName: null,
-        employeeName: null
+        caseNumber: null,//病例号
+        realName: null,//姓名
+        gender: null,//性别
+        cardNumber: null,//身份证号
+        birthday: null,//生日
+        age: null,//年龄
+        ageType: null,//年龄类型
+        homeAddress: null,//家庭住址
+        registMoney: null,//挂号金额
+        visitDate: null,//挂号日期
+        noon: null,//上午or下午
+        deptmentId: null,//科室id
+        employeeId: null,//医生id
+        registLevel: null,//挂号级别
+        settleCategory: null,//结算类别
+        isBook: null,//病历本要否
+        registMethod: null,////收费方式
+        visitState: null,//看诊状态
+        deptmentName: null,//科室名称
+        employeeName: null//医生名称
       },
       // 表单参数
       form: {},
@@ -492,6 +492,7 @@ export default {
     /** 查询挂号管理列表 */
     getList() {
       this.loading = true;
+      console.log(this.queryParams);
       listRegister(this.queryParams).then(response => {
         this.registerList = response.rows;
         this.total = response.total;
@@ -593,9 +594,10 @@ export default {
       }).catch(() => {});
     },
     /** 获取医生列表 */
-    getDoctorList() {
-      this.deptmentId = this.form.deptmentId;
-      getDoctorList(this.form.deptmentId).then(response => {
+    getDoctorList(val) {
+      console.log(val);
+      this.deptmentId = val;
+      getDoctorList(val).then(response => {
         this.doctorList = response.data;
       });
     },
@@ -619,6 +621,7 @@ export default {
 		  this.$modal.msgSuccess("接诊成功");
 		}).catch(() => {});
 	}
+	
   }
 };
 </script>

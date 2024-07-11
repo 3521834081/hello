@@ -42,3 +42,17 @@ export function delJiaofei(id) {
     method: 'delete'
   })
 }
+
+
+// 设置状态
+export function updateStatus(id,status) {
+  const data = {
+    id,
+    status
+  }
+  return request({
+    url: '/jiaofei/jiaofei/updateStatus',
+    method: 'post',
+    data: data
+  })
+}

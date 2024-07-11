@@ -104,6 +104,12 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
+			<el-button v-if="scope.row.status==1"
+			  size="mini"
+			  type="text"
+			  @click="updateStatus(scope.row)"
+			  v-hasPermi="['jiaofei:jiaofei:edit']"
+			>已支付</el-button>
           <el-button
             size="mini"
             type="text"
@@ -139,8 +145,15 @@
         <el-form-item label="身份证号" prop="idcard">
           <el-input v-model="form.idcard" placeholder="请输入身份证号" />
         </el-form-item>
-        <el-form-item label="检查项目" prop="jcxmids">
-          <el-input v-model="form.jcxmids" placeholder="请输入检查项目" />
+        <el-form-item label="检查项目" prop="jcxmIds">
+          <el-select v-model="form.jcxmIds" multiple placeholder="请选择检查项目">
+            <el-option
+              v-for="item in jianchaxiangList"
+              :key="item.id"
+              :label="item.jcname"
+              :value="item.id"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -152,7 +165,9 @@
 </template>
 
 <script>
-import { listJiaofei, getJiaofei, delJiaofei, addJiaofei, updateJiaofei } from "@/api/jiaofei/jiaofei";
+import { listJiaofei, getJiaofei, delJiaofei, addJiaofei, updateJiaofei,updateStatus } from "@/api/jiaofei/jiaofei";
+import { listJianchaxiang, getJianchaxiang, delJianchaxiang, addJianchaxiang, updateJianchaxiang,getJcxmList } from "@/api/jianchaxiang/jianchaxiang";
+
 
 export default {
   name: "Jiaofei",
@@ -173,6 +188,8 @@ export default {
       total: 0,
       // 交费管理表格数据
       jiaofeiList: [],
+	  
+	  jianchaxiangList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -206,10 +223,15 @@ export default {
     getList() {
       this.loading = true;
       listJiaofei(this.queryParams).then(response => {
+		  console.log(response.data);
         this.jiaofeiList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
+	  
+	  getJcxmList().then(response => {
+	    this.jianchaxiangList = response.data;
+	  });
     },
     // 取消按钮
     cancel() {
@@ -260,6 +282,7 @@ export default {
       const id = row.id || this.ids
       getJiaofei(id).then(response => {
         this.form = response.data;
+		this.$set(this.form, "jcxmIds", response.data.jcxmIds);
         this.open = true;
         this.title = "修改交费管理";
       });
@@ -299,7 +322,17 @@ export default {
       this.download('jiaofei/jiaofei/export', {
         ...this.queryParams
       }, `jiaofei_${new Date().getTime()}.xlsx`)
-    }
+    },
+	/** 修改状态 */
+	updateStatus(row) {
+	  const id = row.id;
+	  this.$modal.confirm('是否已确认交费？').then(function() {
+		return updateStatus(id,2);
+	  }).then(() => {
+		this.getList();
+		this.$modal.msgSuccess("交费成功");
+	  }).catch(() => {});
+	}
   }
 };
 </script>
