@@ -1,18 +1,16 @@
 package com.hisedu.project.jiaofei.controller;
 
+import java.awt.*;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.hisedu.framework.web.controller.BaseController;
 import com.hisedu.framework.web.domain.AjaxResult;
@@ -30,20 +28,20 @@ public class TabJiaofeiController extends BaseController{
 
 	@Autowired
 	private ITabJiaofeiService tabJiaofeiService;
-	
+
 	@Autowired
 	private ITabJianchaxiangService tabJianchaxiangService;
-	
+
     @GetMapping("/list")
     public TableDataInfo list(TabJiaofei tabJiaofei)
     {
         startPage();
         List<TabJiaofei> list = tabJiaofeiService.selectTabJiaofeiList(tabJiaofei);
-        
+
         return getDataTable(list);
     }
-    
-    
+
+
     /**
      * 新增交费
      */
@@ -72,9 +70,9 @@ public class TabJiaofeiController extends BaseController{
     	tabJiaofei.setStatus("1");
         return toAjax(tabJiaofeiService.insertTabJiaofei(tabJiaofei));
     }
-    
-    
-    
+
+
+
     /**
      * 删除交费
      */
@@ -83,15 +81,26 @@ public class TabJiaofeiController extends BaseController{
     {
         return toAjax(tabJiaofeiService.deleteTabJiaofeiById(ids));
     }
-    
-    
+
+
     /**
-     * 修改医生状态
+     *
      */
-    @PostMapping("/updateStatus")
+    @PutMapping()
     public AjaxResult updateStatus(@Validated @RequestBody TabJiaofei tabJiaofei)
     {
         return toAjax(tabJiaofeiService.updateTabJiaofei(tabJiaofei));
     }
-    
+
+    @GetMapping("/{id}")
+    public AjaxResult getJiaofei(@PathVariable("id")Long id) {
+        List<TabJiaofei> tabJiaofeis = tabJiaofeiService.selectTabJiaofeiList(new TabJiaofei());
+        List<TabJiaofei> collect = tabJiaofeis.stream().filter(tabJiaofei -> {
+            return tabJiaofei.getId().equals(id);
+        }).collect(Collectors.toList());
+        if (collect.isEmpty()){
+            return AjaxResult.success();
+        }
+        return AjaxResult.success(collect.get(0));
+    }
 }
