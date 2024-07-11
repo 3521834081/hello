@@ -33,7 +33,6 @@ public class TabRegisterServiceImpl implements ITabRegisterService{
 
 	@Override
 	public int insertTabRegister(TabRegister tabRegister) {
-		// TODO Auto-generated method stub
 		Long deptmentId = tabRegister.getDeptmentId();
 		Long employeeId = tabRegister.getEmployeeId();
 		TabKeshi tabKeshi = tabKeshiMapper.selectTabKeshiById(deptmentId);
@@ -54,6 +53,12 @@ public class TabRegisterServiceImpl implements ITabRegisterService{
 	@Override
 	public int updateRegister(TabRegister tabRegister) {
 		// TODO Auto-generated method stub
+		Long deptmentId = tabRegister.getDeptmentId();
+		Long employeeId = tabRegister.getEmployeeId();
+		TabKeshi tabKeshi = tabKeshiMapper.selectTabKeshiById(deptmentId);
+		TabDoctor tabDoctor = tabDoctorMapper.selectTabDoctorById(employeeId);
+		tabRegister.setDeptmentName(tabKeshi.getKsname());
+		tabRegister.setEmployeeName(tabDoctor.getName());
 		return tabRegisterMapper.updateRegister(tabRegister);
 	}
 
