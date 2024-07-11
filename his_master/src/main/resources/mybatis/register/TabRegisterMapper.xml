@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hisedu.project.register.mapper.TabRegisterMapper">
+    
+    <resultMap type="TabRegister" id="TabRegisterResult">
+        <result property="id"        column="id"       />
+        <result property="caseNumber"    column="case_number"    />
+        <result property="realName"     column="real_name"     />
+        <result property="gender"    column="gender"  />
+        <result property="cardNumber"   column="card_number"       />
+        <result property="birthday"    column="birthday"    />
+        <result property="age"        column="age"       />
+        <result property="ageType"    column="age_type"    />
+        <result property="homeAddress"     column="home_address"     />
+        <result property="registMoney"    column="regist_money"  />
+        <result property="visitDate"   column="visit_date"       />
+        <result property="noon"    column="noon"    />
+        <result property="deptmentId"        column="deptment_id"       />
+        <result property="employeeId"    column="employee_id"    />
+        <result property="registLevel"     column="regist_level"     />
+        <result property="settleCategory"    column="settle_category"  />
+        <result property="isBook"   column="is_book"       />
+        <result property="registMethod"    column="regist_method"    />
+        <result property="visitState"    column="visit_state"  />
+        <result property="deptmentName"   column="deptment_name"       />
+        <result property="employeeName"    column="employee_name"    />
+    </resultMap>
+    
+    <sql id="selectTabRegisterVo">
+        select * from tab_register
+    </sql>
+    
+    
+    <select id="selectTabRegisterById" parameterType="Long" resultMap="TabRegisterResult">
+        <include refid="selectTabRegisterVo"/>
+        where id=#{id}
+    </select>
+    
+
+    <select id="selectTabRegisterList" parameterType="TabRegister" resultMap="TabRegisterResult">
+        <include refid="selectTabRegisterVo"/>
+        <where>
+            <if test="caseNumber != null">and case_number=#{caseNumber}</if>
+            <if test="realName != null">and real_name like concat('%',#{realName},'%')</if>
+            <if test="gender != null">and gender=#{gender}</if>
+            <if test="cardNumber != null">and card_number=#{cardNumber}</if>
+            <if test="deptmentId != null">and deptment_id=#{deptmentId}</if>
+            <if test="employeeId != null">and employee_id=#{employeeId}</if>
+            <if test="registLevel != null">and regist_level=#{registLevel}</if>
+            <if test="settleCategory != null">and settle_category=#{settleCategory}</if>
+            <if test="registMethod != null">and regist_method=#{registMethod}</if>
+            <if test="visitState != null">and visit_state=#{visitState}</if>
+        </where>
+
+    </select>
+    
+    
+    <insert id="insertTabRegister" parameterType="TabRegister" useGeneratedKeys="true" keyProperty="id">
+        insert into tab_register
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="caseNumber != null">case_number,</if>
+            <if test="realName != null">real_name,</if>
+            <if test="gender != null">gender,</if>
+            <if test="cardNumber != null">card_number,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="age != null">age,</if>
+            <if test="ageType != null">age_type,</if>
+            <if test="homeAddress != null">home_address,</if>
+            <if test="registMoney != null">regist_money,</if>
+            <if test="visitDate != null">visit_date,</if>
+            <if test="noon != null">noon,</if>
+            <if test="deptmentId != null">deptment_id,</if>
+            <if test="employeeId != null">employee_id,</if>
+            <if test="registLevel != null">regist_level,</if>
+            <if test="settleCategory != null">settle_category,</if>
+            <if test="isBook != null">is_book,</if>
+            <if test="registMethod != null">regist_method,</if>
+            <if test="visitState != null">visit_state,</if>
+            <if test="deptmentName != null">deptment_name,</if>
+            <if test="employeeName != null">employee_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="caseNumber != null">#{caseNumber},</if>
+            <if test="realName != null">#{realName},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="cardNumber != null">#{cardNumber},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="age != null">#{age},</if>
+            <if test="ageType != null">#{ageType},</if>
+            <if test="homeAddress != null">#{homeAddress},</if>
+            <if test="registMoney != null">#{registMoney},</if>
+            <if test="visitDate != null">#{visitDate},</if>
+            <if test="noon != null">#{noon},</if>
+            <if test="deptmentId != null">#{deptmentId},</if>
+            <if test="employeeId != null">#{employeeId},</if>
+            <if test="registLevel != null">#{registLevel},</if>
+            <if test="settleCategory != null">#{settleCategory},</if>
+            <if test="isBook != null">#{isBook},</if>
+            <if test="registMethod != null">#{registMethod},</if>
+            <if test="visitState != null">#{visitState},</if>
+            <if test="deptmentName != null">#{deptmentName},</if>
+            <if test="employeeName != null">#{employeeName},</if>
+         </trim>
+    </insert>
+   
+  
+  	<update id="updateRegister" parameterType="TabRegister">
+        update tab_register
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseNumber != null">case_number = #{caseNumber},</if>
+            <if test="realName != null">real_name = #{realName},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="cardNumber != null">card_number = #{cardNumber},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="ageType != null">age_type = #{ageType},</if>
+            <if test="homeAddress != null">home_address = #{homeAddress},</if>
+            <if test="registMoney != null">regist_money = #{registMoney},</if>
+            <if test="visitDate != null">visit_date = #{visitDate},</if>
+            <if test="noon != null">noon = #{noon},</if>
+            <if test="deptmentId != null">deptment_id = #{deptmentId},</if>
+            <if test="employeeId != null">employee_id = #{employeeId},</if>
+            <if test="registLevel != null">regist_level = #{registLevel},</if>
+            <if test="settleCategory != null">settle_category = #{settleCategory},</if>
+            <if test="isBook != null">is_book = #{isBook},</if>
+            <if test="registMethod != null">regist_method = #{registMethod},</if>
+            <if test="visitState != null">visit_state = #{visitState},</if>
+            <if test="deptmentName != null">deptment_name = #{deptmentName},</if>
+            <if test="employeeName != null">employee_name = #{employeeName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    
+    <delete id="deletTabRegisterById" parameterType="Long">
+    	delete from tab_register where id=#{id}
+    </delete>
+    
+    
+</mapper>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hisedu.project.jianchaxiang.mapper.TabJianchaxiangMapper">
+    
+    <resultMap type="TabJianchaxiang" id="TabJianchaxiangResult">
+        <result property="id"        column="id"       />
+        <result property="jcname"    column="jcname"    />
+        <result property="price"     column="price"     />
+        <result property="orders"    column="orders"  />
+        <result property="jianjie"   column="jianjie"       />
+        <result property="status"    column="status"    />
+    </resultMap>
+    
+    <sql id="selectTabJianchaxiangVo">
+        select id,jcname,price,orders,jianjie,status from tab_jianchaxiang
+    </sql>
+    
+    <select id="selectTabJianchaxiangById" parameterType="Long" resultMap="TabJianchaxiangResult">
+        <include refid="selectTabJianchaxiangVo"/>
+		where id=#{id}
+    </select>
+    
+
+    <select id="selectTabJianchaxiang" parameterType="TabJianchaxiang" resultMap="TabJianchaxiangResult">
+        <include refid="selectTabJianchaxiangVo"/>
+        <where>
+            <if test="jcname != null  and jcname != ''"> and jcname like concat('%', #{jcname}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by orders asc
+    </select>
+    
+    
+    <insert id="insertTabJianchaxiang" parameterType="TabJianchaxiang" useGeneratedKeys="true" keyProperty="id">
+        insert into tab_jianchaxiang
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="jcname != null and jcname != ''">jcname,</if>
+            <if test="price != null">price,</if>
+            <if test="orders != null">orders,</if>
+            <if test="jianjie != null and status != ''">jianjie,</if>
+            <if test="status != null and status != ''">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="jcname != null and jcname != ''">#{jcname},</if>
+            <if test="price != null">#{price},</if>
+            <if test="orders != null">#{orders},</if>
+            <if test="jianjie != null and jianjie != ''">#{jianjie},</if>
+            <if test="status != null and status != ''">#{status},</if>
+         </trim>
+    </insert>
+  
+  	
+  	<update id="updateTabJianchaxiang" parameterType="TabJianchaxiang">
+        update tab_jianchaxiang
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="jcname != null and jcname != ''">jcname = #{jcname},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="orders != null">orders = #{orders},</if>
+            <if test="jianjie != null and jianjie != ''">jianjie = #{jianjie},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    
+    
+    <delete id="deleteTabJianchaxiangById" parameterType="Long">
+    	delete from tab_jianchaxiang where id=#{id}
+    </delete>
+     
+  
+</mapper>

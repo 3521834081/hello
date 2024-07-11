@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hisedu.project.doctor.mapper.TabDoctorMapper">
+    
+    <resultMap type="TabDoctor" id="TabDoctorResult">
+        <result property="id"       column="id"       />
+        <result property="idcode"    column="idcode"    />
+        <result property="name"     column="name"     />
+        <result property="orders"  column="orders"  />
+        <result property="jianjie"       column="jianjie"       />
+        <result property="status"    column="status"    />
+        <result property="ksid"     column="ksid"     />
+        <result property="ksname"  column="ksname"  />
+    </resultMap>
+    
+    <sql id="selectTabDoctorVo">
+        select id,idcode,name,orders,jianjie,status,ksid,ksname from tab_doctor
+    </sql>
+    
+    
+    <select id="selectTabDoctorById" parameterType="Long" resultMap="TabDoctorResult">
+        <include refid="selectTabDoctorVo"/>
+        where id=#{id}
+    </select>
+   
+   
+    <select id="selectTabDoctorList" parameterType="TabDoctor" resultMap="TabDoctorResult">
+        <include refid="selectTabDoctorVo"/>
+        <where>
+            <if test="idcode != null  and idcode != ''"> and idcode like concat('%', #{idcode}, '%')</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="orders != null  and orders != ''"> and orders = #{orders}</if>
+            <if test="jianjie != null  and jianjie != ''"> and jianjie = #{jianjie}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="ksid != null "> and ksid = #{ksid}</if>
+            <if test="ksname != null  and ksname != ''"> and ksname like concat('%', #{ksname}, '%')</if>
+        </where>
+        order by orders asc
+    </select>
+    
+
+	<insert id="insertTabDoctor" parameterType="TabDoctor" useGeneratedKeys="true" keyProperty="id">
+        insert into tab_doctor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idcode != null  and idcode != ''">idcode,</if>
+            <if test="name != null  and name != ''">name,</if>
+            <if test="orders != null  and orders != ''">orders,</if>
+            <if test="jianjie != null  and jianjie != ''">jianjie,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="ksid != null ">ksid,</if>
+            <if test="ksname != null  and ksname != ''">ksname,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="idcode != null  and idcode != ''">#{idcode},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="orders != null  and orders != ''">#{orders},</if>
+            <if test="jianjie != null  and jianjie != ''">#{jianjie},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="ksid != null ">#{ksid},</if>
+            <if test="ksname != null  and ksname != ''">#{ksname},</if>
+         </trim>
+    </insert>
+    
+    
+    <update id="updateTabDoctor" parameterType="TabDoctor">
+        update tab_doctor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="idcode != null  and idcode != ''">idcode = #{idcode},</if>
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="orders != null  and orders != ''">orders = #{orders},</if>
+            <if test="jianjie != null  and jianjie != ''">jianjie = #{jianjie},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="ksid != null ">ksid = #{ksid},</if>
+            <if test="ksname != null  and ksname != ''">ksname = #{ksname},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    
+    
+    <delete id="deleteTabDoctorById" parameterType="Long">
+        delete from tab_doctor where id = #{id}
+    </delete>
+    
+  
+</mapper>
