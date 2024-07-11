@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form v-model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
       <el-form-item label="病历号" prop="caseNumber">
         <el-input
           v-model="queryParams.caseNumber"
